@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { assign } from 'lodash'
 import firebase from 'firebase'
 import { Router, Route, redirectTo, navigate } from '@reach/router'
+import swal from 'sweetalert2'
 import Login from './components/Login'
 import Dashboard from './components/Dashboard'
 
@@ -25,7 +26,6 @@ class App extends Component {
 	componentDidMount() {
 		firebase.initializeApp(config)
 		firebase.auth().onAuthStateChanged(user => {
-			console.log(user)
 			if (!!user) {
 				firebase
 					.database()
@@ -35,10 +35,20 @@ class App extends Component {
 					.once('value')
 					.then(snapshot => {
 						let userprofile = snapshot.val()
-						console.log(userprofile)
-						assign(userprofile, { uid: user.uid })
-						this.setState({ userprofile })
-						navigate('/')
+						if (userprofile.accountType != 3) {
+							swal(
+								'Not Authorized.',
+								'Your account is not authorized as an admin',
+								'error'
+							)
+							firebase.auth().signOut()
+							navigate('/login')
+						} else {
+							swal('Authorized.', 'Logged In ...', 'success')
+							assign(userprofile, { uid: user.uid })
+							this.setState({ userprofile })
+							navigate('/')
+						}
 					})
 			}
 		})
@@ -46,7 +56,6 @@ class App extends Component {
 
 	render() {
 		const { userprofile } = this.state
-		console.log(userprofile)
 		return (
 			<Router>
 				<Dashboard path="/" userprofile={userprofile} />

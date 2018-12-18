@@ -5,5 +5,5 @@ export const authenticateUser = (email, password) => {
 	firebase
 		.auth()
 		.signInWithEmailAndPassword(email, password)
-		.then(response => swal('Logged In', 'verifying..', 'successJ'))
+		.then(response => swal('Logged In', 'verifying..', 'success'))
 }

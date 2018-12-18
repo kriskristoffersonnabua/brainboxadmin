@@ -77,7 +77,6 @@ class LoginPage extends React.Component {
 	}
 
 	authenticateUser = () => {
-		console.log(this.state)
 		authenticateUser(this.state.username, this.state.password)
 	}
 
