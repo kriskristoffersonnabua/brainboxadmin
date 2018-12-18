@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import logo from './logo.svg'
+import { assign } from 'lodash'
 import firebase from 'firebase'
-import { Router, Route } from '@reach/router'
+import { Router, Route, redirectTo, navigate } from '@reach/router'
 import Login from './components/Login'
-import './App.css'
+import Dashboard from './components/Dashboard'
 
 const config = {
 	apiKey: 'AIzaSyAS-i9qG4cGEF5pCErxwRCkLCpMBlO14RE',
@@ -17,37 +17,43 @@ const config = {
 class App extends Component {
 	constructor(props) {
 		super(props)
-		this.state = { toggle: true }
+		this.state = { toggle: true, userprofile: null }
 	}
 
 	toggleToggle = () => this.setState({ toggle: !this.state.toggle })
 
 	componentDidMount() {
 		firebase.initializeApp(config)
+		firebase.auth().onAuthStateChanged(user => {
+			console.log(user)
+			if (!!user) {
+				firebase
+					.database()
+					.ref()
+					.child('userprofile')
+					.child(user.uid)
+					.once('value')
+					.then(snapshot => {
+						let userprofile = snapshot.val()
+						console.log(userprofile)
+						assign(userprofile, { uid: user.uid })
+						this.setState({ userprofile })
+						navigate('/')
+					})
+			}
+		})
 	}
 
 	render() {
-		const { toggle } = this.state
+		const { userprofile } = this.state
+		console.log(userprofile)
 		return (
 			<Router>
+				<Dashboard path="/" userprofile={userprofile} />
 				<Login path="/login" />
 			</Router>
 		)
 	}
 }
 
-function A(props) {
-	// you can use object spread because babel-preset-react-app is set up for you
-	const { href, children, ...rest } = props
-	return (
-		<a
-			className="App-link"
-			href={href}
-			target="_blank"
-			rel="noopener noreferrer"
-			{...rest}>
-			{children}
-		</a>
-	)
-}
-export default App
+export { App as default, firebase }
