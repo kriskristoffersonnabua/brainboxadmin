@@ -1,23 +1,70 @@
 import React from 'react'
 import { StyledHeader, HeroContainer, NavContainer } from './styles'
-import AppBar from '@material-ui/core/AppBar'
-import Tabs from '@material-ui/core/Tabs'
-import Tab from '@material-ui/core/Tab'
-import Group from '@material-ui/icons/Group'
-import Mood from '@material-ui/icons/Mood'
-import Avatar from '@material-ui/core/Avatar'
+import { navigate } from '@reach/router'
+import { Avatar, Tabs, Tab, Tooltip, Menu, MenuItem } from '@material-ui/core'
+import {
+	Group,
+	Mood,
+	ChromeReaderMode,
+	SentimentSatisfied
+} from '@material-ui/icons'
+import { firebase } from '../../../App'
 
 class Header extends React.Component {
+	constructor(props) {
+		super(props)
+		this.state = {
+			openMenu: false
+		}
+		this.avatarIcon = React.createRef()
+	}
+
+	tabChanged = (evt, value) => {
+		console.log(value)
+		if (value == 0) {
+			navigate('/dashboard/tutors')
+		} else if (value === 1) {
+			navigate('/dashboard/services')
+		}
+	}
+
+	handleOpenMenu = evt => {
+		this.setState({ openMenu: true, anchorEl: evt.currentTarget })
+	}
+
+	handleCloseMenu = evt => {
+		this.setState({ openMenu: false, anchorEl: null })
+	}
+
+	handleSignout = () => {
+		firebase.auth().signOut()
+	}
+
 	render() {
+		const { anchorEl, openMenu } = this.state
+
 		return (
 			<StyledHeader>
 				<HeroContainer>
-					<Avatar />
+					<Avatar>
+						<SentimentSatisfied onClick={this.handleOpenMenu} />
+					</Avatar>
 				</HeroContainer>
+				<Menu
+					id="simple-menu"
+					anchorEl={anchorEl}
+					open={openMenu}
+					onClose={this.handleCloseMenu}>
+					<MenuItem onClick={this.handleSignout}>Signout</MenuItem>
+				</Menu>
 				<NavContainer>
-					<Tabs>
-						<Tab label="Tutors" icon={<Group />} />
-						<Tab label="Clients" icon={<Group />} />
+					<Tabs onChange={this.tabChanged}>
+						<Tooltip title="Tutors">
+							<Tab icon={<Group />} />
+						</Tooltip>
+						<Tooltip title="Services">
+							<Tab icon={<ChromeReaderMode />} />
+						</Tooltip>
 					</Tabs>
 				</NavContainer>
 			</StyledHeader>

@@ -3,11 +3,10 @@ import styled from 'styled-components'
 export const StyledHeader = styled.header`
 	width: 100%;
 	height: auto;
-	position: absolute;
-	top: 0px;
-	left: 0px;
 	background: #fff;
 	display: flex;
+	padding: 10px;
+	box-sizing: border-box;
 	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
 `
 

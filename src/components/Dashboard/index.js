@@ -1,8 +1,11 @@
 import React from 'react'
 import Header from './Header'
-import { navigate, Redirect } from '@reach/router'
+import Tutors from '../Tutors'
+import { navigate, Redirect, Router } from '@reach/router'
 import { BodyWrapper } from './dashboardStyles'
 import { withStyles } from '@material-ui/core/styles'
+
+const Sample = () => <div>hi</div>
 
 const styles = theme => ({
 	root: {
@@ -16,12 +19,17 @@ class Dashboard extends React.Component {
 		super(props)
 	}
 
-	getDerivedStateFromProps(nextProps) {
-		return nextProps
+	componentWillReceiveProps(nextProps) {
+		const { userprofile } = nextProps
+		this.setState({ userprofile })
 	}
 
 	render() {
-		const { classes, userprofile } = this.props
+		const { classes, userprofile, loading } = this.props
+
+		if (loading && !!!userprofile) {
+			return <div>Loading</div>
+		}
 
 		if (!!!userprofile) {
 			return <Redirect to="/login" noThrow />
@@ -30,6 +38,9 @@ class Dashboard extends React.Component {
 		return (
 			<BodyWrapper className={classes.root}>
 				<Header />
+				<Router>
+					<Tutors path="/tutors" />
+				</Router>
 			</BodyWrapper>
 		)
 	}

@@ -5,5 +5,14 @@ export const authenticateUser = (email, password) => {
 	firebase
 		.auth()
 		.signInWithEmailAndPassword(email, password)
-		.then(response => swal('Logged In', 'verifying..', 'success'))
+		.then(response =>
+			swal({
+				title: 'Logged In',
+				text: 'verifying..',
+				type: 'success',
+				timer: 2000,
+				showConfirmButton: false,
+				showCancelButton: false
+			})
+		)
 }

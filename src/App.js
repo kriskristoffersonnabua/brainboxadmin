@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { assign } from 'lodash'
 import firebase from 'firebase'
-import { Router, Route, redirectTo, navigate } from '@reach/router'
+import { Router, Route, redirectTo, navigate, Redirect } from '@reach/router'
 import swal from 'sweetalert2'
 import Login from './components/Login'
 import Dashboard from './components/Dashboard'
@@ -14,17 +14,18 @@ const config = {
 	storageBucket: 'brainbox-1526375140649.appspot.com',
 	messagingSenderId: '122718275558'
 }
+firebase.initializeApp(config)
+
+//import provider here
+import Providers from './providers'
 
 class App extends Component {
 	constructor(props) {
 		super(props)
-		this.state = { toggle: true, userprofile: null }
+		this.state = { loading: true, userprofile: null }
 	}
 
-	toggleToggle = () => this.setState({ toggle: !this.state.toggle })
-
 	componentDidMount() {
-		firebase.initializeApp(config)
 		firebase.auth().onAuthStateChanged(user => {
 			if (!!user) {
 				firebase
@@ -44,23 +45,31 @@ class App extends Component {
 							firebase.auth().signOut()
 							navigate('/login')
 						} else {
-							swal('Authorized.', 'Logged In ...', 'success')
-							assign(userprofile, { uid: user.uid })
-							this.setState({ userprofile })
-							navigate('/')
+							setTimeout(() => {
+								assign(userprofile, { uid: user.uid })
+								this.setState({ userprofile, loading: false })
+								navigate('/dashboard')
+							}, 1000)
 						}
 					})
-			}
+			} else this.setState({ loading: false, userprofile: null })
 		})
 	}
 
 	render() {
-		const { userprofile } = this.state
+		const { userprofile, loading } = this.state
 		return (
-			<Router>
-				<Dashboard path="/" userprofile={userprofile} />
-				<Login path="/login" />
-			</Router>
+			<Providers>
+				<Router>
+					<Redirect from="/" to="/dashboard" />
+					<Dashboard
+						path="/dashboard/*"
+						loading={loading}
+						userprofile={userprofile}
+					/>
+					<Login path="/login" />
+				</Router>
+			</Providers>
 		)
 	}
 }
