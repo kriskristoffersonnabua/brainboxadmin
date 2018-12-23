@@ -4,6 +4,8 @@ import Tutors from '../Tutors'
 import { navigate, Redirect, Router } from '@reach/router'
 import { BodyWrapper } from './dashboardStyles'
 import { withStyles } from '@material-ui/core/styles'
+import Loading from '../Loading'
+import TutorOverview from '../TutorOverview'
 
 const Sample = () => <div>hi</div>
 
@@ -28,7 +30,7 @@ class Dashboard extends React.Component {
 		const { classes, userprofile, loading } = this.props
 
 		if (loading && !!!userprofile) {
-			return <div>Loading</div>
+			return <Loading text={'Loading Admin'} />
 		}
 
 		if (!!!userprofile) {
@@ -40,6 +42,7 @@ class Dashboard extends React.Component {
 				<Header />
 				<Router>
 					<Tutors path="/tutors" />
+					<TutorOverview path="/tutors/:id" />
 				</Router>
 			</BodyWrapper>
 		)

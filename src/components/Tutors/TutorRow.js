@@ -30,11 +30,16 @@ class TutorRow extends React.Component {
 		this.controller = null
 	}
 
+	showTutorOverview = () => {
+		this.props.navigateToTutorOverview(this.props.id, this.state.tutor)
+	}
+
 	render() {
 		const { last_name, first_name, accountEnabled } = this.state.tutor
 
 		return (
 			<TableRow
+				onClick={this.showTutorOverview}
 				hover={true}
 				style={{
 					width: '100%'

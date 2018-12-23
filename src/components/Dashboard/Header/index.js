@@ -20,7 +20,6 @@ class Header extends React.Component {
 	}
 
 	tabChanged = (evt, value) => {
-		console.log(value)
 		if (value == 0) {
 			navigate('/dashboard/tutors')
 		} else if (value === 1) {
@@ -45,9 +44,9 @@ class Header extends React.Component {
 
 		return (
 			<StyledHeader>
-				<HeroContainer>
-					<Avatar>
-						<SentimentSatisfied onClick={this.handleOpenMenu} />
+				<HeroContainer onClick={this.handleOpenMenu}>
+					<Avatar color="primary">
+						<SentimentSatisfied />
 					</Avatar>
 				</HeroContainer>
 				<Menu

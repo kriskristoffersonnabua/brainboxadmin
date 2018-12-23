@@ -48,7 +48,7 @@ class App extends Component {
 							setTimeout(() => {
 								assign(userprofile, { uid: user.uid })
 								this.setState({ userprofile, loading: false })
-								navigate('/dashboard')
+								navigate('/dashboard/tutors')
 							}, 1000)
 						}
 					})
@@ -61,7 +61,7 @@ class App extends Component {
 		return (
 			<Providers>
 				<Router>
-					<Redirect from="/" to="/dashboard" />
+					<Redirect from="/" to="/dashboard" noThrow />
 					<Dashboard
 						path="/dashboard/*"
 						loading={loading}

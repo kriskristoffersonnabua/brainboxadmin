@@ -8,13 +8,12 @@ class TutorsProvider extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			loading: false,
+			loading: true,
 			allTutors: []
 		}
 	}
 
 	getAllTutors = () => {
-		this.setState({ loading: true })
 		firebase
 			.database()
 			.ref()
@@ -33,9 +32,17 @@ class TutorsProvider extends React.Component {
 			})
 	}
 
+	selectTutor = tutorProfile => {
+		this.setState({ tutorProfile })
+	}
+
+	unselectTutor = () => this.setState({ tutorProfile: null })
+
 	render() {
 		const fns = {
-			getAllTutors: this.getAllTutors
+			getAllTutors: this.getAllTutors,
+			selectTutor: this.selectTutor,
+			unselectTutor: this.unselectTutor
 		}
 		return (
 			<TutorsContext.Provider

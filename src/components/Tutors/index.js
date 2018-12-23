@@ -7,15 +7,17 @@ import {
 	TableCell,
 	TableBody
 } from '@material-ui/core'
+import { navigate } from '@reach/router'
 import TutorsContext from './data'
 import TutorRow from './TutorRow'
+import Loading from '../Loading'
 
 class Tutors extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
 			loading: false,
-			allTutors: []
+			allTutors: null
 		}
 	}
 
@@ -27,12 +29,16 @@ class Tutors extends React.Component {
 		this.props.methods.getAllTutors()
 	}
 
+	showTutorOverview = (tutorid, tutorProfile) => {
+		this.props.methods.selectTutor(tutorProfile)
+		navigate('/dashboard/tutors/' + tutorid)
+	}
+
 	render() {
 		const { allTutors } = this.state
 
 		if (this.state.loading) {
-			//TODO: LOADING_COMPONENT
-			return <div>loading</div>
+			return <Loading text={'fetching tutors'} />
 		}
 
 		return (
@@ -48,7 +54,15 @@ class Tutors extends React.Component {
 						</TableHead>
 						<TableBody>
 							{allTutors.map(tutorId => {
-								return <TutorRow key={tutorId} id={tutorId} />
+								return (
+									<TutorRow
+										navigateToTutorOverview={
+											this.showTutorOverview
+										}
+										key={tutorId}
+										id={tutorId}
+									/>
+								)
 							})}
 						</TableBody>
 					</Table>
