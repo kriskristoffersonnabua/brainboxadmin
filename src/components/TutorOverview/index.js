@@ -96,6 +96,14 @@ class TutorOverview extends React.Component {
 		})
 	}
 
+	handleAccountActivation = evt => {
+		let value = evt.currentTarget.dataset.enabled === 'true' ? false : true
+		let ref = firebase.database().ref('userprofile')
+		ref.child(this.state.tutorId).update({ accountEnabled: value })
+		ref.off()
+		this.navigateToList()
+	}
+
 	render() {
 		const { tutorProfile = {} } = this.props
 		const { showLPR, allRecords } = this.state
@@ -119,8 +127,11 @@ class TutorOverview extends React.Component {
 					<Button
 						color="secondary"
 						variant="contained"
-						onClick={() => {}}>
-						Deactivate
+						data-enabled={!!tutorProfile.accountEnabled}
+						onClick={this.handleAccountActivation}>
+						{!!tutorProfile.accountEnabled
+							? 'Deactivate'
+							: 'Activate'}
 					</Button>
 				</div>
 				<OverviewHeader>
@@ -151,7 +162,9 @@ class TutorOverview extends React.Component {
 					</Details>
 					<Details>
 						<Typography>Account Enabled:</Typography>
-						<Typography>{!!tutorProfile.accountEnabled}</Typography>
+						<Typography>
+							{!!tutorProfile.accountEnabled ? 'Yes' : 'No'}
+						</Typography>
 					</Details>
 				</OverviewHeader>
 				<LPRContainer>
