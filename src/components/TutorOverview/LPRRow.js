@@ -1,5 +1,6 @@
 import React from 'react'
 import { firebase } from '../../App'
+import { TableRow, TableCell, Button } from '@material-ui/core'
 
 class LRPRow extends React.Component {
 	constructor(props) {

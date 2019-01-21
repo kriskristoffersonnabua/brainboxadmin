@@ -1,11 +1,12 @@
 import React from 'react'
 import Header from './Header'
-import Tutors from '../Tutors'
 import { navigate, Redirect, Router } from '@reach/router'
 import { BodyWrapper } from './dashboardStyles'
 import { withStyles } from '@material-ui/core/styles'
 import Loading from '../Loading'
+import Tutors from '../Tutors'
 import TutorOverview from '../TutorOverview'
+import Services from '../Services'
 
 const Sample = () => <div>hi</div>
 
@@ -43,6 +44,7 @@ class Dashboard extends React.Component {
 				<Router>
 					<Tutors path="/tutors" />
 					<TutorOverview path="/tutors/:id" />
+					<Services path="/services" />
 				</Router>
 			</BodyWrapper>
 		)

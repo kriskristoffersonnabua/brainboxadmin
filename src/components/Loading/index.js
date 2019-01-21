@@ -13,8 +13,8 @@ const Loading = props => {
 			}}>
 			<img
 				style={{
-					width: '30vw',
-					height: '30vw'
+					width: '260px',
+					height: '260px'
 				}}
 				src={require('../../assets/bboxapplogo.png')}
 			/>
