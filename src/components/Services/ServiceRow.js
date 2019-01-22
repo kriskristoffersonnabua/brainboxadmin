@@ -8,7 +8,9 @@ import {
 	TableCell,
 	Button
 } from '@material-ui/core'
+import { Delete, Edit, AssignmentInd } from '@material-ui/icons'
 import { firebase } from '../../App'
+import { navigate } from '@reach/router'
 
 const SERVICES_TYPES = [
 	'CSC Exam Review',
@@ -75,7 +77,6 @@ class ServiceRow extends React.Component {
 	}
 
 	openScheduleForm = () => {
-		console.log(this.props.service)
 		!!this.props.openForm &&
 			!!this.state.editing &&
 			this.props.openForm(
@@ -88,6 +89,11 @@ class ServiceRow extends React.Component {
 		let ref = firebase.database().ref('service/' + this.props.service.sid)
 		ref.remove()
 		ref.off()
+	}
+
+	showEnrolees = () => {
+		const { service: { sid } } = this.props
+		navigate('/dashboard/enrolees/' + sid)
 	}
 
 	render() {
@@ -157,16 +163,15 @@ class ServiceRow extends React.Component {
 								alignItems: 'center'
 							}}>
 							<Button
-								onClick={() => {}}
+								onClick={this.showEnrolees}
 								style={{
 									width: 'auto',
 									height: '35px',
 									color: 'white',
 									background: 'green',
-									padding: '10px',
 									marginRight: '10px'
 								}}>
-								Enrolees
+								<AssignmentInd />
 							</Button>
 							<Button
 								onClick={this.toggleEditMode}
@@ -175,10 +180,9 @@ class ServiceRow extends React.Component {
 									height: '35px',
 									color: 'white',
 									background: 'green',
-									padding: '10px',
 									marginRight: '10px'
 								}}>
-								Edit
+								<Edit />
 							</Button>
 							<Button
 								onClick={this.deleteService}
@@ -186,10 +190,9 @@ class ServiceRow extends React.Component {
 									width: 'auto',
 									height: '35px',
 									color: 'white',
-									background: 'red',
-									padding: '10px'
+									background: 'red'
 								}}>
-								Remove
+								<Delete />
 							</Button>
 						</div>
 					</TableCell>

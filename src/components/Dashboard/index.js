@@ -7,6 +7,7 @@ import Loading from '../Loading'
 import Tutors from '../Tutors'
 import TutorOverview from '../TutorOverview'
 import Services from '../Services'
+import EnroleeList from '../EnroleeList'
 
 const Sample = () => <div>hi</div>
 
@@ -45,6 +46,7 @@ class Dashboard extends React.Component {
 					<Tutors path="/tutors" />
 					<TutorOverview path="/tutors/:id" />
 					<Services path="/services" />
+					<EnroleeList path="/enrolees/:id" />
 				</Router>
 			</BodyWrapper>
 		)
